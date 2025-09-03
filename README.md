@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PixelTest App
+
+PixelTest is a simple tool for composing, previewing, and sending HTML emails. It provides a live HTML editor, a preview mode, recipient management with validation, and visual feedback via toasts.
+
+## Features
+- Create and preview HTML emails (with Ace editor and live preview)
+- Add up to 3 recipients with email validation (Zod)
+- Success/error toasts and loading states (Sonner)
+- SMTP send endpoint using Nodemailer
+- Authentication scaffolding with Clerk (optional)
+- Modern UI with Tailwind CSS, Framer Motion, and a shader background
+
+## Tech Stack
+- Next.js 15, React 19
+- Tailwind CSS 4
+- Zod (form validation)
+- Sonner (toasts)
+- Framer Motion (animations)
+- react-ace (HTML editor)
+- Nodemailer (SMTP)
 
 ## Getting Started
 
-First, run the development server:
+1) Install dependencies
+
+```bash
+npm install
+```
+
+2) Environment variables
+
+Create a `.env.local` at the project root and add your SMTP credentials:
+
+```env
+SMTP_HOST=smtp.yourprovider.com
+SMTP_PORT=587
+SMTP_USER=your_user
+SMTP_PASS=your_password
+```
+
+Optional (if you want to enable Clerk auth components):
+
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+```
+
+3) Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
+- Home page shows the hero section and header. If Clerk is configured, you will see the auth buttons.
+- Go to `/create-email` to compose and preview your email:
+  - Add up to 3 recipients
+  - Fill in the subject
+  - Write HTML in the editor or switch to Preview
+  - Click “Enviar email de teste” to send via the `/api/send-email` endpoint
+- You will see loading/success/error toasts during the send flow.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## API
+POST `/api/send-email`
 
-## Learn More
+Body:
+```json
+{
+  "to": ["recipient@example.com"],
+  "subject": "Subject here",
+  "html": "<h1>Hello</h1>"
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+Responses:
+- 200: `{ message: "Email sent successfully!" }`
+- 400: `{ error: "Missing required fields" }`
+- 500: `{ error: "Failed to send email" }`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
+- `npm run dev`: start Next.js in development mode (Turbopack)
+- `npm run build`: build the project
+- `npm run start`: start the production server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Folder Structure
+- `src/app` – Next.js App Router pages and API routes
+  - `api/send-email/route.ts` – Nodemailer endpoint
+  - `create-email/page.tsx` – email composer page
+- `src/components` – shared UI and layout components
+- `src/components/ui` – design system primitives (e.g., Button)
 
-## Deploy on Vercel
+## Deployment
+1) Ensure environment variables are set in your hosting provider (SMTP and optional Clerk keys)
+2) Build and start:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run build
+npm run start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Troubleshooting
+- SMTP connection errors: verify `SMTP_HOST`, `SMTP_PORT` (465 for secure, otherwise 587/25), `SMTP_USER`, `SMTP_PASS`.
+- Emails not delivered: check your SMTP provider’s dashboard/logs and sender domain configuration (SPF/DKIM).
+- Auth UI not showing: add Clerk keys to `.env.local` and restart the dev server.
+
+## License
+This project is licensed under the MIT License.
