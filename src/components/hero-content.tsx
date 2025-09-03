@@ -32,14 +32,19 @@ export default function HeroContent() {
         </p>
 
         <div className="flex items-center gap-4 flex-wrap">
-          <Link href="">
+          <a
+            href="https://github.com/marcuswmc/pixeltest-nextjs"
+            target="_blank"
+          >
             <Button className="px-8 py-3 rounded-full bg-transparent border border-white/30 text-white font-normal text-xs transition-all duration-200 hover:bg-white/10 hover:border-white/50 cursor-pointer">
               Project repository
             </Button>
+          </a>
+          <Link href="/create-email">
+            <Button className="px-8 py-3 rounded-full bg-white text-black font-normal text-xs transition-all duration-200 hover:bg-white/90 cursor-pointer">
+              Start Testing
+            </Button>
           </Link>
-          <Button className="px-8 py-3 rounded-full bg-white text-black font-normal text-xs transition-all duration-200 hover:bg-white/90 cursor-pointer">
-            Start Testing
-          </Button>
         </div>
       </div>
     </main>
