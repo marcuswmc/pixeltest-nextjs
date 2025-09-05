@@ -64,8 +64,8 @@ export default function CreateEmailPage() {
       toast.error(parsed.error.errors[0]?.message ?? "Email inválido");
       return;
     }
-    if (recipients.length >= 3) {
-      toast.error("Máximo de 3 destinatários");
+    if (recipients.length >= 6) {
+      toast.error("Máximo de 6 destinatários");
       return;
     }
     if (recipients.includes(email)) {
@@ -134,16 +134,16 @@ export default function CreateEmailPage() {
           <div className="rounded-2xl bg-white/5 border border-white/10 p-4 mb-8  backdrop-blur-md shadow-xl">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
               <label className="text-white font-medium text-lg">
-                Recipients (máx. 3)
+                Recipients (max. 6)
               </label>
               <div className="flex items-center gap-2 text-white/50 text-sm">
-                <span>{recipients.length}/3</span>
+                <span>{recipients.length}/6</span>
               </div>
             </div>
 
             <div className="flex flex-col gap-3 mb-4 min-h-[44px]">
               <div className="flex flex-col md:flex-row gap-2">
-                {recipients.length < 3 && (
+                {recipients.length < 6 && (
                   <>
                     <input
                       type="email"
@@ -166,7 +166,7 @@ export default function CreateEmailPage() {
                 )}
               </div>
               <AnimatePresence>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {recipients.map((email, index) => (
                     <EmailChip
                       key={email}
